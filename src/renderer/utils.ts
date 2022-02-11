@@ -7,3 +7,7 @@ export async function insertBook(book: Book) {
 export async function getBooks(query = {}) {
   return window.electron.ipcRenderer.invoke('read-library', query);
 }
+
+export async function removeBooks(query = {}) {
+  return window.electron.ipcRenderer.invoke('delete-library', query);
+}

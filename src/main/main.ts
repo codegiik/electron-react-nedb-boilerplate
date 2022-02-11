@@ -32,7 +32,12 @@ ipcMain.handle('read-library', async () => {
 });
 
 ipcMain.handle('store-library', async (_event, book) => {
-  const result = library.create(book);
+  const result = await library.create(book);
+  return result;
+});
+
+ipcMain.handle('delete-library', async (_event, query) => {
+  const result = await library.remove(query);
   return result;
 });
 
@@ -60,8 +65,6 @@ const installExtensions = async () => {
     )
     .catch(console.log);
 };
-
-global.library = library;
 
 const createWindow = async () => {
   if (isDevelopment) {

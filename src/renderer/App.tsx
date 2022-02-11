@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import icon from '../../assets/icon.svg';
 import './App.css';
-import { getBooks, insertBook } from './utils';
+import { getBooks, insertBook, removeBooks } from './utils';
 
 const Hello = () => {
   const [books, setBooks] = useState();
@@ -26,7 +26,7 @@ const Hello = () => {
         <button
           type="button"
           onClick={async () => {
-            const result = await insertBook({
+            await insertBook({
               name: 'prova',
               author: 'Giggino',
               isbn: '12123',
@@ -35,6 +35,15 @@ const Hello = () => {
           }}
         >
           insert Simple Book
+        </button>
+        <button
+          type="button"
+          onClick={async () => {
+            await removeBooks();
+            await updateBooks();
+          }}
+        >
+          Reset Library
         </button>
         {JSON.stringify(books)}
       </div>

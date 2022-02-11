@@ -1,29 +1,28 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
+const VALID_CHANNELS = ['read-library', 'store-library', 'delete-library'];
+
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
     on(channel, func) {
-      const validChannels = ['read-library', 'store-library'];
-      if (validChannels.includes(channel)) {
+      if (VALID_CHANNELS.includes(channel)) {
         // Deliberately strip event as it includes `sender`
         ipcRenderer.on(channel, (event, ...args) => func(...args));
       }
+      throw new Error('Invoked channel is not valid');
     },
     once(channel, func) {
-      const validChannels = ['read-library', 'store-library'];
-      if (validChannels.includes(channel)) {
+      if (VALID_CHANNELS.includes(channel)) {
         // Deliberately strip event as it includes `sender`
         ipcRenderer.once(channel, (event, ...args) => func(...args));
       }
+      throw new Error('Invoked channel is not valid');
     },
     async invoke(channel, ...args) {
-      const validChannels = ['read-library', 'store-library'];
-      if (validChannels.includes(channel))
+      if (VALID_CHANNELS.includes(channel))
         return ipcRenderer.invoke(channel, ...args);
 
-      return {
-        error: 'channel is not valid',
-      };
+      throw new Error('Invoked channel is not valid');
     },
   },
 });

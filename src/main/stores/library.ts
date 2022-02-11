@@ -27,19 +27,23 @@ class Library {
     return this.validator(data);
   }
 
-  get(_id: number): Promise<Book> {
+  async get(_id: number): Promise<Book> {
     return this.db.findOne({ _id }).exec();
   }
 
-  getAll(query: any): Promise<Book[]> {
-    return this.db.find().limit(10);
+  async getAll(query: any = {}): Promise<Book[]> {
+    return this.db.find(query).limit(10);
   }
 
-  create(data: Book) {
+  async create(data: Book) {
     if (this.validate(data)) return this.db.insert(data);
     return {
       error: 'data is not valid',
     };
+  }
+
+  async remove(query: any = {}, options = { multi: true }) {
+    return this.db.remove(query, options);
   }
 }
 
